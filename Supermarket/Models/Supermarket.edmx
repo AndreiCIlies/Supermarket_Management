@@ -1,0 +1,1188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SupermarketModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="64" />
+          <Property Name="is_active" Type="bit" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="64" />
+          <Property Name="is_active" Type="bit" />
+        </EntityType>
+        <EntityType Name="MarketUser">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="64" />
+          <Property Name="password_hash" Type="char" MaxLength="64" />
+          <Property Name="id_type" Type="int" Nullable="false" />
+          <Property Name="is_active" Type="bit" />
+        </EntityType>
+        <EntityType Name="Producer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_country" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="64" />
+          <Property Name="is_active" Type="bit" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="64" />
+          <Property Name="barcode" Type="varchar" MaxLength="128" />
+          <Property Name="id_category" Type="int" Nullable="false" />
+          <Property Name="id_producer" Type="int" Nullable="false" />
+          <Property Name="is_active" Type="bit" />
+        </EntityType>
+        <EntityType Name="Receipt">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="issue_date" Type="date" />
+          <Property Name="id_cashier" Type="int" Nullable="false" />
+          <Property Name="total_price" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="is_active" Type="bit" />
+        </EntityType>
+        <EntityType Name="ReceiptItem">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_receipt" Type="int" Nullable="false" />
+          <Property Name="id_product" Type="int" Nullable="false" />
+          <Property Name="quantity" Type="int" Nullable="false" />
+          <Property Name="total_price" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="is_active" Type="bit" />
+        </EntityType>
+        <EntityType Name="Stock">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_product" Type="int" Nullable="false" />
+          <Property Name="quantity" Type="int" Nullable="false" />
+          <Property Name="supply_date" Type="date" />
+          <Property Name="expiration_date" Type="date" />
+          <Property Name="purchase_price" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="selling_price" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="is_active" Type="bit" />
+        </EntityType>
+        <EntityType Name="UserType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="64" />
+          <Property Name="is_active" Type="bit" />
+        </EntityType>
+        <Association Name="FK__MarketUse__id_ty__5070F446">
+          <End Role="UserType" Type="Self.UserType" Multiplicity="1" />
+          <End Role="MarketUser" Type="Self.MarketUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="MarketUser">
+              <PropertyRef Name="id_type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Producer__id_cou__3D5E1FD2">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="Producer" Type="Self.Producer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Producer">
+              <PropertyRef Name="id_country" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Product__id_cate__45F365D3">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="id_category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Product__id_prod__46E78A0C">
+          <End Role="Producer" Type="Self.Producer" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="id_producer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Receipt__id_cash__5AEE82B9">
+          <End Role="MarketUser" Type="Self.MarketUser" Multiplicity="1" />
+          <End Role="Receipt" Type="Self.Receipt" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MarketUser">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Receipt">
+              <PropertyRef Name="id_cashier" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ReceiptIt__id_pr__5FB337D6">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="ReceiptItem" Type="Self.ReceiptItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ReceiptItem">
+              <PropertyRef Name="id_product" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ReceiptIt__id_re__5EBF139D">
+          <End Role="Receipt" Type="Self.Receipt" Multiplicity="1" />
+          <End Role="ReceiptItem" Type="Self.ReceiptItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Receipt">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ReceiptItem">
+              <PropertyRef Name="id_receipt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Stock__id_produc__5629CD9C">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Stock">
+              <PropertyRef Name="id_product" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AddCashier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+          <Parameter Name="password_hash" Type="char" Mode="In" />
+        </Function>
+        <Function Name="AddCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="AddProducer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_country" Type="int" Mode="In" />
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="AddProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_producer" Type="int" Mode="In" />
+          <Parameter Name="id_category" Type="int" Mode="In" />
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+          <Parameter Name="barcode" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AddReceipt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_cashier" Type="int" Mode="In" />
+          <Parameter Name="total_price" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="AddReceiptItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="id_product" Type="int" Mode="In" />
+          <Parameter Name="quantity" Type="int" Mode="In" />
+          <Parameter Name="total_price" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="AddStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_product" Type="int" Mode="In" />
+          <Parameter Name="quantity" Type="int" Mode="In" />
+          <Parameter Name="supply_date" Type="date" Mode="In" />
+          <Parameter Name="expiration_date" Type="date" Mode="In" />
+          <Parameter Name="purchase_price" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="DeactivateStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="quantity" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DecreaseQuantity" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_stock" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteCashier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteProducer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="EditCashierName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="EditCashierPassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="password_hash" Type="char" Mode="In" />
+        </Function>
+        <Function Name="EditCategoryName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="EditProducerName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="EditProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="id_category" Type="int" Mode="In" />
+          <Parameter Name="id_producer" Type="int" Mode="In" />
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+          <Parameter Name="barcode" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="EditStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="id_product" Type="int" Mode="In" />
+          <Parameter Name="quantity" Type="int" Mode="In" />
+          <Parameter Name="supply_date" Type="date" Mode="In" />
+          <Parameter Name="expiration_date" Type="date" Mode="In" />
+          <Parameter Name="selling_price" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="GetActiveBarcodes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetActiveCashiers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetActiveCashiersIds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetActiveCategories" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetActiveCategoriesIds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetActiveCountryIds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetActiveProducers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetActiveProducersIds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetActiveProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetActiveProductsIds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetActiveStocksIds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetActiveStocksProductsBarcodes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetCashierByName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="GetCashiers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetCashierSumsInEveryMonth" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+          <Parameter Name="month" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetCategories" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetLastReceiptId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetMarketUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetMarketUsersPasswords" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetProducers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetProducersProductsCategories" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="producer_name" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="GetProductByBarcode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="barcode" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GetProductByCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="category_name" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="GetProductByExpirationDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="date" Type="date" Mode="In" />
+        </Function>
+        <Function Name="GetProductByName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="GetProductByProducer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="producer_name" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="GetProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetQuantity" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="productId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetStockId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_product" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetStockProductByBarcode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="barcode" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GetStockPurchasePrice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetStocks" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetSumByCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="category_name" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="GetTheBiggestReceipt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="date" Type="date" Mode="In" />
+        </Function>
+        <Function Name="UpdateStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="SupermarketModelStoreContainer">
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MarketUser" EntityType="Self.MarketUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Producer" EntityType="Self.Producer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Receipt" EntityType="Self.Receipt" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReceiptItem" EntityType="Self.ReceiptItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Stock" EntityType="Self.Stock" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserType" EntityType="Self.UserType" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__MarketUse__id_ty__5070F446" Association="Self.FK__MarketUse__id_ty__5070F446">
+            <End Role="UserType" EntitySet="UserType" />
+            <End Role="MarketUser" EntitySet="MarketUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Producer__id_cou__3D5E1FD2" Association="Self.FK__Producer__id_cou__3D5E1FD2">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="Producer" EntitySet="Producer" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Product__id_cate__45F365D3" Association="Self.FK__Product__id_cate__45F365D3">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Product__id_prod__46E78A0C" Association="Self.FK__Product__id_prod__46E78A0C">
+            <End Role="Producer" EntitySet="Producer" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Receipt__id_cash__5AEE82B9" Association="Self.FK__Receipt__id_cash__5AEE82B9">
+            <End Role="MarketUser" EntitySet="MarketUser" />
+            <End Role="Receipt" EntitySet="Receipt" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ReceiptIt__id_pr__5FB337D6" Association="Self.FK__ReceiptIt__id_pr__5FB337D6">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="ReceiptItem" EntitySet="ReceiptItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ReceiptIt__id_re__5EBF139D" Association="Self.FK__ReceiptIt__id_re__5EBF139D">
+            <End Role="Receipt" EntitySet="Receipt" />
+            <End Role="ReceiptItem" EntitySet="ReceiptItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Stock__id_produc__5629CD9C" Association="Self.FK__Stock__id_produc__5629CD9C">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Stock" EntitySet="Stock" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SupermarketModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="is_active" Type="Boolean" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__Product__id_cate__45F365D3" FromRole="Category" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="is_active" Type="Boolean" />
+          <NavigationProperty Name="Producer" Relationship="Self.FK__Producer__id_cou__3D5E1FD2" FromRole="Country" ToRole="Producer" />
+        </EntityType>
+        <EntityType Name="MarketUser">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="password_hash" Type="String" MaxLength="64" FixedLength="true" Unicode="false" />
+          <Property Name="id_type" Type="Int32" Nullable="false" />
+          <Property Name="is_active" Type="Boolean" />
+          <NavigationProperty Name="UserType" Relationship="Self.FK__MarketUse__id_ty__5070F446" FromRole="MarketUser" ToRole="UserType" />
+          <NavigationProperty Name="Receipt" Relationship="Self.FK__Receipt__id_cash__5AEE82B9" FromRole="MarketUser" ToRole="Receipt" />
+        </EntityType>
+        <EntityType Name="Producer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_country" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="is_active" Type="Boolean" />
+          <NavigationProperty Name="Country" Relationship="Self.FK__Producer__id_cou__3D5E1FD2" FromRole="Producer" ToRole="Country" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__Product__id_prod__46E78A0C" FromRole="Producer" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="barcode" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="id_category" Type="Int32" Nullable="false" />
+          <Property Name="id_producer" Type="Int32" Nullable="false" />
+          <Property Name="is_active" Type="Boolean" />
+          <NavigationProperty Name="Category" Relationship="Self.FK__Product__id_cate__45F365D3" FromRole="Product" ToRole="Category" />
+          <NavigationProperty Name="Producer" Relationship="Self.FK__Product__id_prod__46E78A0C" FromRole="Product" ToRole="Producer" />
+          <NavigationProperty Name="ReceiptItem" Relationship="Self.FK__ReceiptIt__id_pr__5FB337D6" FromRole="Product" ToRole="ReceiptItem" />
+          <NavigationProperty Name="Stock" Relationship="Self.FK__Stock__id_produc__5629CD9C" FromRole="Product" ToRole="Stock" />
+        </EntityType>
+        <EntityType Name="Receipt">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="issue_date" Type="DateTime" Precision="0" />
+          <Property Name="id_cashier" Type="Int32" Nullable="false" />
+          <Property Name="total_price" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="is_active" Type="Boolean" />
+          <NavigationProperty Name="MarketUser" Relationship="Self.FK__Receipt__id_cash__5AEE82B9" FromRole="Receipt" ToRole="MarketUser" />
+          <NavigationProperty Name="ReceiptItem" Relationship="Self.FK__ReceiptIt__id_re__5EBF139D" FromRole="Receipt" ToRole="ReceiptItem" />
+        </EntityType>
+        <EntityType Name="ReceiptItem">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_receipt" Type="Int32" Nullable="false" />
+          <Property Name="id_product" Type="Int32" Nullable="false" />
+          <Property Name="quantity" Type="Int32" Nullable="false" />
+          <Property Name="total_price" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="is_active" Type="Boolean" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__ReceiptIt__id_pr__5FB337D6" FromRole="ReceiptItem" ToRole="Product" />
+          <NavigationProperty Name="Receipt" Relationship="Self.FK__ReceiptIt__id_re__5EBF139D" FromRole="ReceiptItem" ToRole="Receipt" />
+        </EntityType>
+        <EntityType Name="Stock">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_product" Type="Int32" Nullable="false" />
+          <Property Name="quantity" Type="Int32" Nullable="false" />
+          <Property Name="supply_date" Type="DateTime" Precision="0" />
+          <Property Name="expiration_date" Type="DateTime" Precision="0" />
+          <Property Name="purchase_price" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="selling_price" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="is_active" Type="Boolean" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__Stock__id_produc__5629CD9C" FromRole="Stock" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="UserType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="is_active" Type="Boolean" />
+          <NavigationProperty Name="MarketUser" Relationship="Self.FK__MarketUse__id_ty__5070F446" FromRole="UserType" ToRole="MarketUser" />
+        </EntityType>
+        <Association Name="FK__Product__id_cate__45F365D3">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="id_category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Producer__id_cou__3D5E1FD2">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="Producer" Type="Self.Producer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Producer">
+              <PropertyRef Name="id_country" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MarketUse__id_ty__5070F446">
+          <End Role="UserType" Type="Self.UserType" Multiplicity="1" />
+          <End Role="MarketUser" Type="Self.MarketUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="MarketUser">
+              <PropertyRef Name="id_type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Receipt__id_cash__5AEE82B9">
+          <End Role="MarketUser" Type="Self.MarketUser" Multiplicity="1" />
+          <End Role="Receipt" Type="Self.Receipt" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MarketUser">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Receipt">
+              <PropertyRef Name="id_cashier" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Product__id_prod__46E78A0C">
+          <End Role="Producer" Type="Self.Producer" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="id_producer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ReceiptIt__id_pr__5FB337D6">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="ReceiptItem" Type="Self.ReceiptItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ReceiptItem">
+              <PropertyRef Name="id_product" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Stock__id_produc__5629CD9C">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Stock">
+              <PropertyRef Name="id_product" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ReceiptIt__id_re__5EBF139D">
+          <End Role="Receipt" Type="Self.Receipt" Multiplicity="1" />
+          <End Role="ReceiptItem" Type="Self.ReceiptItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Receipt">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ReceiptItem">
+              <PropertyRef Name="id_receipt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SupermarketEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Category" EntityType="Self.Category" />
+          <EntitySet Name="Country" EntityType="Self.Country" />
+          <EntitySet Name="MarketUser" EntityType="Self.MarketUser" />
+          <EntitySet Name="Producer" EntityType="Self.Producer" />
+          <EntitySet Name="Product" EntityType="Self.Product" />
+          <EntitySet Name="Receipt" EntityType="Self.Receipt" />
+          <EntitySet Name="ReceiptItem" EntityType="Self.ReceiptItem" />
+          <EntitySet Name="Stock" EntityType="Self.Stock" />
+          <EntitySet Name="UserType" EntityType="Self.UserType" />
+          <AssociationSet Name="FK__Product__id_cate__45F365D3" Association="Self.FK__Product__id_cate__45F365D3">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Producer__id_cou__3D5E1FD2" Association="Self.FK__Producer__id_cou__3D5E1FD2">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="Producer" EntitySet="Producer" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MarketUse__id_ty__5070F446" Association="Self.FK__MarketUse__id_ty__5070F446">
+            <End Role="UserType" EntitySet="UserType" />
+            <End Role="MarketUser" EntitySet="MarketUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Receipt__id_cash__5AEE82B9" Association="Self.FK__Receipt__id_cash__5AEE82B9">
+            <End Role="MarketUser" EntitySet="MarketUser" />
+            <End Role="Receipt" EntitySet="Receipt" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Product__id_prod__46E78A0C" Association="Self.FK__Product__id_prod__46E78A0C">
+            <End Role="Producer" EntitySet="Producer" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ReceiptIt__id_pr__5FB337D6" Association="Self.FK__ReceiptIt__id_pr__5FB337D6">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="ReceiptItem" EntitySet="ReceiptItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Stock__id_produc__5629CD9C" Association="Self.FK__Stock__id_produc__5629CD9C">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Stock" EntitySet="Stock" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ReceiptIt__id_re__5EBF139D" Association="Self.FK__ReceiptIt__id_re__5EBF139D">
+            <End Role="Receipt" EntitySet="Receipt" />
+            <End Role="ReceiptItem" EntitySet="ReceiptItem" />
+          </AssociationSet>
+          <FunctionImport Name="AddCashier">
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="password_hash" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddCategory">
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddProducer">
+            <Parameter Name="id_country" Mode="In" Type="Int32" />
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddProduct">
+            <Parameter Name="id_producer" Mode="In" Type="Int32" />
+            <Parameter Name="id_category" Mode="In" Type="Int32" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="barcode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddReceipt">
+            <Parameter Name="id_cashier" Mode="In" Type="Int32" />
+            <Parameter Name="total_price" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="AddReceiptItem">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="id_product" Mode="In" Type="Int32" />
+            <Parameter Name="quantity" Mode="In" Type="Int32" />
+            <Parameter Name="total_price" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="AddStock">
+            <Parameter Name="id_product" Mode="In" Type="Int32" />
+            <Parameter Name="quantity" Mode="In" Type="Int32" />
+            <Parameter Name="supply_date" Mode="In" Type="DateTime" />
+            <Parameter Name="expiration_date" Mode="In" Type="DateTime" />
+            <Parameter Name="purchase_price" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="DeactivateStock">
+            <Parameter Name="quantity" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DecreaseQuantity">
+            <Parameter Name="id_stock" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteCashier">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteCategory">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteProducer">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteProduct">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteStock">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="EditCashierName">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="EditCashierPassword">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="password_hash" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="EditCategoryName">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="EditProducerName">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="EditProduct">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="id_category" Mode="In" Type="Int32" />
+            <Parameter Name="id_producer" Mode="In" Type="Int32" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="barcode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="EditStock">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="id_product" Mode="In" Type="Int32" />
+            <Parameter Name="quantity" Mode="In" Type="Int32" />
+            <Parameter Name="supply_date" Mode="In" Type="DateTime" />
+            <Parameter Name="expiration_date" Mode="In" Type="DateTime" />
+            <Parameter Name="selling_price" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="GetActiveBarcodes" ReturnType="Collection(String)" />
+          <FunctionImport Name="GetActiveCashiers" ReturnType="Collection(String)" />
+          <FunctionImport Name="GetActiveCashiersIds" ReturnType="Collection(Int32)" />
+          <FunctionImport Name="GetActiveCategories" ReturnType="Collection(String)" />
+          <FunctionImport Name="GetActiveCategoriesIds" ReturnType="Collection(Int32)" />
+          <FunctionImport Name="GetActiveCountryIds" ReturnType="Collection(Int32)" />
+          <FunctionImport Name="GetActiveProducers" ReturnType="Collection(String)" />
+          <FunctionImport Name="GetActiveProducersIds" ReturnType="Collection(Int32)" />
+          <FunctionImport Name="GetActiveProducts" ReturnType="Collection(String)" />
+          <FunctionImport Name="GetActiveProductsIds" ReturnType="Collection(Int32)" />
+          <FunctionImport Name="GetActiveStocksIds" ReturnType="Collection(Int32)" />
+          <FunctionImport Name="GetActiveStocksProductsBarcodes" ReturnType="Collection(String)" />
+          <FunctionImport Name="GetCashierByName" ReturnType="Collection(Int32)">
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetCashiers" ReturnType="Collection(SupermarketModel.GetCashiers_Result)" />
+          <FunctionImport Name="GetCashierSumsInEveryMonth" ReturnType="Collection(SupermarketModel.GetCashierSumsInEveryMonth_Result)">
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="month" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetCategories" ReturnType="Collection(SupermarketModel.GetCategories_Result)" />
+          <FunctionImport Name="GetLastReceiptId" ReturnType="Collection(Int32)" />
+          <FunctionImport Name="GetMarketUsers" ReturnType="Collection(String)" />
+          <FunctionImport Name="GetMarketUsersPasswords" ReturnType="Collection(String)" />
+          <FunctionImport Name="GetProducers" ReturnType="Collection(SupermarketModel.GetProducers_Result)" />
+          <FunctionImport Name="GetProducersProductsCategories" ReturnType="Collection(SupermarketModel.GetProducersProductsCategories_Result)">
+            <Parameter Name="producer_name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetProductByBarcode" ReturnType="Collection(SupermarketModel.GetProductByBarcode_Result)">
+            <Parameter Name="barcode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetProductByCategory" ReturnType="Collection(SupermarketModel.GetProductByCategory_Result)">
+            <Parameter Name="category_name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetProductByExpirationDate" ReturnType="Collection(SupermarketModel.GetProductByExpirationDate_Result)">
+            <Parameter Name="date" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="GetProductByName" ReturnType="Collection(SupermarketModel.GetProductByName_Result)">
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetProductByProducer" ReturnType="Collection(SupermarketModel.GetProductByProducer_Result)">
+            <Parameter Name="producer_name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetProducts" ReturnType="Collection(SupermarketModel.GetProducts_Result)" />
+          <FunctionImport Name="GetQuantity" ReturnType="Collection(Int32)">
+            <Parameter Name="productId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetStockId" ReturnType="Collection(Int32)">
+            <Parameter Name="id_product" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetStockProductByBarcode" ReturnType="Collection(SupermarketModel.GetStockProductByBarcode_Result)">
+            <Parameter Name="barcode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetStockPurchasePrice" ReturnType="Collection(Decimal)">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetStocks" ReturnType="Collection(SupermarketModel.GetStocks_Result)" />
+          <FunctionImport Name="GetSumByCategory" ReturnType="Collection(Decimal)">
+            <Parameter Name="category_name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetTheBiggestReceipt" ReturnType="Collection(SupermarketModel.GetTheBiggestReceipt_Result)">
+            <Parameter Name="date" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateStock" />
+        </EntityContainer>
+        <ComplexType Name="GetCashiers_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="password_hash" Nullable="true" MaxLength="64" />
+        </ComplexType>
+        <ComplexType Name="GetCashierSumsInEveryMonth_Result">
+          <Property Type="String" Name="cashierName" Nullable="true" MaxLength="64" />
+          <Property Type="Int32" Name="receiptMonth" Nullable="true" />
+          <Property Type="Int32" Name="receiptDay" Nullable="true" />
+          <Property Type="Decimal" Name="sumTotalPrice" Nullable="true" Precision="38" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="GetCategories_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="64" />
+        </ComplexType>
+        <ComplexType Name="GetProducers_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="Int32" Name="id_country" Nullable="false" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="64" />
+        </ComplexType>
+        <ComplexType Name="GetProducersProductsCategories_Result">
+          <Property Type="String" Name="producerName" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="productName" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="categoryName" Nullable="true" MaxLength="64" />
+        </ComplexType>
+        <ComplexType Name="GetProductByBarcode_Result">
+          <Property Type="Int32" Name="productId" Nullable="false" />
+          <Property Type="String" Name="productName" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="productBarcode" Nullable="true" MaxLength="128" />
+          <Property Type="DateTime" Name="productExpirationDate" Nullable="true" />
+          <Property Type="String" Name="productProducer" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="productCategory" Nullable="true" MaxLength="64" />
+        </ComplexType>
+        <ComplexType Name="GetProductByCategory_Result">
+          <Property Type="Int32" Name="productId" Nullable="false" />
+          <Property Type="String" Name="productName" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="productBarcode" Nullable="true" MaxLength="128" />
+          <Property Type="DateTime" Name="productExpirationDate" Nullable="true" />
+          <Property Type="String" Name="productProducer" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="productCategory" Nullable="true" MaxLength="64" />
+        </ComplexType>
+        <ComplexType Name="GetProductByExpirationDate_Result">
+          <Property Type="Int32" Name="productId" Nullable="false" />
+          <Property Type="String" Name="productName" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="productBarcode" Nullable="true" MaxLength="128" />
+          <Property Type="DateTime" Name="productExpirationDate" Nullable="true" />
+          <Property Type="String" Name="productProducer" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="productCategory" Nullable="true" MaxLength="64" />
+        </ComplexType>
+        <ComplexType Name="GetProductByName_Result">
+          <Property Type="Int32" Name="productId" Nullable="false" />
+          <Property Type="String" Name="productName" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="productBarcode" Nullable="true" MaxLength="128" />
+          <Property Type="DateTime" Name="productExpirationDate" Nullable="true" />
+          <Property Type="String" Name="productProducer" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="productCategory" Nullable="true" MaxLength="64" />
+        </ComplexType>
+        <ComplexType Name="GetProductByProducer_Result">
+          <Property Type="Int32" Name="productId" Nullable="false" />
+          <Property Type="String" Name="productName" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="productBarcode" Nullable="true" MaxLength="128" />
+          <Property Type="DateTime" Name="productExpirationDate" Nullable="true" />
+          <Property Type="String" Name="productProducer" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="productCategory" Nullable="true" MaxLength="64" />
+        </ComplexType>
+        <ComplexType Name="GetProducts_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="producerName" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="categoryName" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="barcode" Nullable="true" MaxLength="128" />
+        </ComplexType>
+        <ComplexType Name="GetStockProductByBarcode_Result">
+          <Property Type="Int32" Name="productId" Nullable="false" />
+          <Property Type="String" Name="productName" Nullable="true" MaxLength="64" />
+          <Property Type="Decimal" Name="stockSellingPrice" Nullable="false" Precision="18" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="GetStocks_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="productName" Nullable="true" MaxLength="64" />
+          <Property Type="Int32" Name="quantity" Nullable="false" />
+          <Property Type="DateTime" Name="supply_date" Nullable="true" />
+          <Property Type="DateTime" Name="expiration_date" Nullable="true" />
+          <Property Type="Decimal" Name="purchase_price" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="selling_price" Nullable="false" Precision="18" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="GetTheBiggestReceipt_Result">
+          <Property Type="Int32" Name="receiptId" Nullable="false" />
+          <Property Type="String" Name="cashier" Nullable="true" MaxLength="64" />
+          <Property Type="Decimal" Name="receiptTotalPrice" Nullable="false" Precision="18" Scale="0" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SupermarketModelStoreContainer" CdmEntityContainer="SupermarketEntities">
+          <EntitySetMapping Name="Category">
+            <EntityTypeMapping TypeName="SupermarketModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Country">
+            <EntityTypeMapping TypeName="SupermarketModel.Country">
+              <MappingFragment StoreEntitySet="Country">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MarketUser">
+            <EntityTypeMapping TypeName="SupermarketModel.MarketUser">
+              <MappingFragment StoreEntitySet="MarketUser">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="password_hash" ColumnName="password_hash" />
+                <ScalarProperty Name="id_type" ColumnName="id_type" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Producer">
+            <EntityTypeMapping TypeName="SupermarketModel.Producer">
+              <MappingFragment StoreEntitySet="Producer">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_country" ColumnName="id_country" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Product">
+            <EntityTypeMapping TypeName="SupermarketModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="barcode" ColumnName="barcode" />
+                <ScalarProperty Name="id_category" ColumnName="id_category" />
+                <ScalarProperty Name="id_producer" ColumnName="id_producer" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Receipt">
+            <EntityTypeMapping TypeName="SupermarketModel.Receipt">
+              <MappingFragment StoreEntitySet="Receipt">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="issue_date" ColumnName="issue_date" />
+                <ScalarProperty Name="id_cashier" ColumnName="id_cashier" />
+                <ScalarProperty Name="total_price" ColumnName="total_price" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReceiptItem">
+            <EntityTypeMapping TypeName="SupermarketModel.ReceiptItem">
+              <MappingFragment StoreEntitySet="ReceiptItem">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_receipt" ColumnName="id_receipt" />
+                <ScalarProperty Name="id_product" ColumnName="id_product" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="total_price" ColumnName="total_price" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stock">
+            <EntityTypeMapping TypeName="SupermarketModel.Stock">
+              <MappingFragment StoreEntitySet="Stock">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_product" ColumnName="id_product" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="supply_date" ColumnName="supply_date" />
+                <ScalarProperty Name="expiration_date" ColumnName="expiration_date" />
+                <ScalarProperty Name="purchase_price" ColumnName="purchase_price" />
+                <ScalarProperty Name="selling_price" ColumnName="selling_price" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserType">
+            <EntityTypeMapping TypeName="SupermarketModel.UserType">
+              <MappingFragment StoreEntitySet="UserType">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddCashier" FunctionName="SupermarketModel.Store.AddCashier" />
+          <FunctionImportMapping FunctionImportName="AddCategory" FunctionName="SupermarketModel.Store.AddCategory" />
+          <FunctionImportMapping FunctionImportName="AddProducer" FunctionName="SupermarketModel.Store.AddProducer" />
+          <FunctionImportMapping FunctionImportName="AddProduct" FunctionName="SupermarketModel.Store.AddProduct" />
+          <FunctionImportMapping FunctionImportName="AddReceipt" FunctionName="SupermarketModel.Store.AddReceipt" />
+          <FunctionImportMapping FunctionImportName="AddReceiptItem" FunctionName="SupermarketModel.Store.AddReceiptItem" />
+          <FunctionImportMapping FunctionImportName="AddStock" FunctionName="SupermarketModel.Store.AddStock" />
+          <FunctionImportMapping FunctionImportName="DeactivateStock" FunctionName="SupermarketModel.Store.DeactivateStock" />
+          <FunctionImportMapping FunctionImportName="DecreaseQuantity" FunctionName="SupermarketModel.Store.DecreaseQuantity" />
+          <FunctionImportMapping FunctionImportName="DeleteCashier" FunctionName="SupermarketModel.Store.DeleteCashier" />
+          <FunctionImportMapping FunctionImportName="DeleteCategory" FunctionName="SupermarketModel.Store.DeleteCategory" />
+          <FunctionImportMapping FunctionImportName="DeleteProducer" FunctionName="SupermarketModel.Store.DeleteProducer" />
+          <FunctionImportMapping FunctionImportName="DeleteProduct" FunctionName="SupermarketModel.Store.DeleteProduct" />
+          <FunctionImportMapping FunctionImportName="DeleteStock" FunctionName="SupermarketModel.Store.DeleteStock" />
+          <FunctionImportMapping FunctionImportName="EditCashierName" FunctionName="SupermarketModel.Store.EditCashierName" />
+          <FunctionImportMapping FunctionImportName="EditCashierPassword" FunctionName="SupermarketModel.Store.EditCashierPassword" />
+          <FunctionImportMapping FunctionImportName="EditCategoryName" FunctionName="SupermarketModel.Store.EditCategoryName" />
+          <FunctionImportMapping FunctionImportName="EditProducerName" FunctionName="SupermarketModel.Store.EditProducerName" />
+          <FunctionImportMapping FunctionImportName="EditProduct" FunctionName="SupermarketModel.Store.EditProduct" />
+          <FunctionImportMapping FunctionImportName="EditStock" FunctionName="SupermarketModel.Store.EditStock" />
+          <FunctionImportMapping FunctionImportName="GetActiveBarcodes" FunctionName="SupermarketModel.Store.GetActiveBarcodes" />
+          <FunctionImportMapping FunctionImportName="GetActiveCashiers" FunctionName="SupermarketModel.Store.GetActiveCashiers" />
+          <FunctionImportMapping FunctionImportName="GetActiveCashiersIds" FunctionName="SupermarketModel.Store.GetActiveCashiersIds" />
+          <FunctionImportMapping FunctionImportName="GetActiveCategories" FunctionName="SupermarketModel.Store.GetActiveCategories" />
+          <FunctionImportMapping FunctionImportName="GetActiveCategoriesIds" FunctionName="SupermarketModel.Store.GetActiveCategoriesIds" />
+          <FunctionImportMapping FunctionImportName="GetActiveCountryIds" FunctionName="SupermarketModel.Store.GetActiveCountryIds" />
+          <FunctionImportMapping FunctionImportName="GetActiveProducers" FunctionName="SupermarketModel.Store.GetActiveProducers" />
+          <FunctionImportMapping FunctionImportName="GetActiveProducersIds" FunctionName="SupermarketModel.Store.GetActiveProducersIds" />
+          <FunctionImportMapping FunctionImportName="GetActiveProducts" FunctionName="SupermarketModel.Store.GetActiveProducts" />
+          <FunctionImportMapping FunctionImportName="GetActiveProductsIds" FunctionName="SupermarketModel.Store.GetActiveProductsIds" />
+          <FunctionImportMapping FunctionImportName="GetActiveStocksIds" FunctionName="SupermarketModel.Store.GetActiveStocksIds" />
+          <FunctionImportMapping FunctionImportName="GetActiveStocksProductsBarcodes" FunctionName="SupermarketModel.Store.GetActiveStocksProductsBarcodes" />
+          <FunctionImportMapping FunctionImportName="GetCashierByName" FunctionName="SupermarketModel.Store.GetCashierByName" />
+          <FunctionImportMapping FunctionImportName="GetCashiers" FunctionName="SupermarketModel.Store.GetCashiers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupermarketModel.GetCashiers_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="password_hash" ColumnName="password_hash" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetCashierSumsInEveryMonth" FunctionName="SupermarketModel.Store.GetCashierSumsInEveryMonth">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupermarketModel.GetCashierSumsInEveryMonth_Result">
+                <ScalarProperty Name="cashierName" ColumnName="cashierName" />
+                <ScalarProperty Name="receiptMonth" ColumnName="receiptMonth" />
+                <ScalarProperty Name="receiptDay" ColumnName="receiptDay" />
+                <ScalarProperty Name="sumTotalPrice" ColumnName="sumTotalPrice" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetCategories" FunctionName="SupermarketModel.Store.GetCategories">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupermarketModel.GetCategories_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetLastReceiptId" FunctionName="SupermarketModel.Store.GetLastReceiptId" />
+          <FunctionImportMapping FunctionImportName="GetMarketUsers" FunctionName="SupermarketModel.Store.GetMarketUsers" />
+          <FunctionImportMapping FunctionImportName="GetMarketUsersPasswords" FunctionName="SupermarketModel.Store.GetMarketUsersPasswords" />
+          <FunctionImportMapping FunctionImportName="GetProducers" FunctionName="SupermarketModel.Store.GetProducers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupermarketModel.GetProducers_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_country" ColumnName="id_country" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProducersProductsCategories" FunctionName="SupermarketModel.Store.GetProducersProductsCategories">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupermarketModel.GetProducersProductsCategories_Result">
+                <ScalarProperty Name="producerName" ColumnName="producerName" />
+                <ScalarProperty Name="productName" ColumnName="productName" />
+                <ScalarProperty Name="categoryName" ColumnName="categoryName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProductByBarcode" FunctionName="SupermarketModel.Store.GetProductByBarcode">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupermarketModel.GetProductByBarcode_Result">
+                <ScalarProperty Name="productId" ColumnName="productId" />
+                <ScalarProperty Name="productName" ColumnName="productName" />
+                <ScalarProperty Name="productBarcode" ColumnName="productBarcode" />
+                <ScalarProperty Name="productExpirationDate" ColumnName="productExpirationDate" />
+                <ScalarProperty Name="productProducer" ColumnName="productProducer" />
+                <ScalarProperty Name="productCategory" ColumnName="productCategory" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProductByCategory" FunctionName="SupermarketModel.Store.GetProductByCategory">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupermarketModel.GetProductByCategory_Result">
+                <ScalarProperty Name="productId" ColumnName="productId" />
+                <ScalarProperty Name="productName" ColumnName="productName" />
+                <ScalarProperty Name="productBarcode" ColumnName="productBarcode" />
+                <ScalarProperty Name="productExpirationDate" ColumnName="productExpirationDate" />
+                <ScalarProperty Name="productProducer" ColumnName="productProducer" />
+                <ScalarProperty Name="productCategory" ColumnName="productCategory" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProductByExpirationDate" FunctionName="SupermarketModel.Store.GetProductByExpirationDate">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupermarketModel.GetProductByExpirationDate_Result">
+                <ScalarProperty Name="productId" ColumnName="productId" />
+                <ScalarProperty Name="productName" ColumnName="productName" />
+                <ScalarProperty Name="productBarcode" ColumnName="productBarcode" />
+                <ScalarProperty Name="productExpirationDate" ColumnName="productExpirationDate" />
+                <ScalarProperty Name="productProducer" ColumnName="productProducer" />
+                <ScalarProperty Name="productCategory" ColumnName="productCategory" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProductByName" FunctionName="SupermarketModel.Store.GetProductByName">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupermarketModel.GetProductByName_Result">
+                <ScalarProperty Name="productId" ColumnName="productId" />
+                <ScalarProperty Name="productName" ColumnName="productName" />
+                <ScalarProperty Name="productBarcode" ColumnName="productBarcode" />
+                <ScalarProperty Name="productExpirationDate" ColumnName="productExpirationDate" />
+                <ScalarProperty Name="productProducer" ColumnName="productProducer" />
+                <ScalarProperty Name="productCategory" ColumnName="productCategory" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProductByProducer" FunctionName="SupermarketModel.Store.GetProductByProducer">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupermarketModel.GetProductByProducer_Result">
+                <ScalarProperty Name="productId" ColumnName="productId" />
+                <ScalarProperty Name="productName" ColumnName="productName" />
+                <ScalarProperty Name="productBarcode" ColumnName="productBarcode" />
+                <ScalarProperty Name="productExpirationDate" ColumnName="productExpirationDate" />
+                <ScalarProperty Name="productProducer" ColumnName="productProducer" />
+                <ScalarProperty Name="productCategory" ColumnName="productCategory" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProducts" FunctionName="SupermarketModel.Store.GetProducts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupermarketModel.GetProducts_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="producerName" ColumnName="producerName" />
+                <ScalarProperty Name="categoryName" ColumnName="categoryName" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="barcode" ColumnName="barcode" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetQuantity" FunctionName="SupermarketModel.Store.GetQuantity" />
+          <FunctionImportMapping FunctionImportName="GetStockId" FunctionName="SupermarketModel.Store.GetStockId" />
+          <FunctionImportMapping FunctionImportName="GetStockProductByBarcode" FunctionName="SupermarketModel.Store.GetStockProductByBarcode">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupermarketModel.GetStockProductByBarcode_Result">
+                <ScalarProperty Name="productId" ColumnName="productId" />
+                <ScalarProperty Name="productName" ColumnName="productName" />
+                <ScalarProperty Name="stockSellingPrice" ColumnName="stockSellingPrice" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetStockPurchasePrice" FunctionName="SupermarketModel.Store.GetStockPurchasePrice" />
+          <FunctionImportMapping FunctionImportName="GetStocks" FunctionName="SupermarketModel.Store.GetStocks">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupermarketModel.GetStocks_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="productName" ColumnName="productName" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="supply_date" ColumnName="supply_date" />
+                <ScalarProperty Name="expiration_date" ColumnName="expiration_date" />
+                <ScalarProperty Name="purchase_price" ColumnName="purchase_price" />
+                <ScalarProperty Name="selling_price" ColumnName="selling_price" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetSumByCategory" FunctionName="SupermarketModel.Store.GetSumByCategory" />
+          <FunctionImportMapping FunctionImportName="GetTheBiggestReceipt" FunctionName="SupermarketModel.Store.GetTheBiggestReceipt">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupermarketModel.GetTheBiggestReceipt_Result">
+                <ScalarProperty Name="receiptId" ColumnName="receiptId" />
+                <ScalarProperty Name="cashier" ColumnName="cashier" />
+                <ScalarProperty Name="receiptTotalPrice" ColumnName="receiptTotalPrice" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="UpdateStock" FunctionName="SupermarketModel.Store.UpdateStock" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

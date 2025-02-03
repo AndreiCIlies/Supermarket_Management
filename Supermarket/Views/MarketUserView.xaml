@@ -1,0 +1,245 @@
+﻿<Window x:Class="Supermarket.Views.MarketUserView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Supermarket.ViewModels"
+        xmlns:converters="clr-namespace:Supermarket.Converters"
+        mc:Ignorable="d"
+        Title="MarketUserView" Height="650" Width="900">
+    <Window.DataContext>
+        <local:MarketUserVM/>
+    </Window.DataContext>
+    <Window.Resources>
+        <converters:CashierNamePasswordConverter x:Key="cashierNamePasswordConverter"/>
+        <converters:CashierIdNameConverter x:Key="cashierIdNameConverter"/>
+        <converters:CashierIdPasswordConverter x:Key="cashierIdPasswordConverter"/>
+        <converters:CashierIdConverter x:Key="cashierIdConverter"/>
+        <converters:CashierNameMonthConverter x:Key="cashierNameMonthConverter"/>
+        <converters:ProductStringConverter x:Key="productStringConverter"/>
+        <converters:ProductDateTimeConverter x:Key="productDateTimeConverter"/>
+    </Window.Resources>
+
+    <Grid>
+        <StackPanel Visibility="{Binding ShowAdminElementsVisibility}" VerticalAlignment="Center" HorizontalAlignment="Center" Background="LightBlue" Width="175" Height="270">
+            <TextBlock HorizontalAlignment="Center" Width="170" Margin="0 5" Background="AliceBlue" TextAlignment="Center" FontFamily="Consolas" FontSize="25">Admin mode</TextBlock>
+            <Button Content="Market users" Width="150" Height="35" Margin="0 5" FontFamily="Consolas" FontSize="15" Command="{Binding CashiersCommand}"/>
+            <Button Content="Categories" Width="150" Height="35" Margin="0 5" FontFamily="Consolas" FontSize="15" Command="{Binding CategoryCommand}"/>
+            <Button Content="Producers" Width="150" Height="35" Margin="0 5" FontFamily="Consolas" FontSize="15" Command="{Binding ProducerCommand}"/>
+            <Button Content="Products" Width="150" Height="35" Margin="0 5" FontFamily="Consolas" FontSize="15" Command="{Binding ProductCommand}"/>
+            <Button Content="Stocks" Width="150" Height="35" Margin="0 5" FontFamily="Consolas" FontSize="15" Command="{Binding StockCommand}"/>
+        </StackPanel>
+        <StackPanel Visibility="{Binding ShowCashierElementsVisibility}">
+            <TextBlock HorizontalAlignment="Center" Width="170" Margin="0 5" Background="AliceBlue" TextAlignment="Center" FontFamily="Consolas" FontSize="25">Cashier mode</TextBlock>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0" Background="LightBlue" Width="793" Height="230">
+                <DataGrid Name="productGrid" Margin="13,10,0,15" AutoGenerateColumns="False" Width="455" Height="200" FontFamily="Consolas" ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{Binding Product, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="id" Width="25" Binding="{Binding Item1}"/>
+                        <DataGridTextColumn Header="name" Width="70" Binding="{Binding Item2}"/>
+                        <DataGridTextColumn Header="barcode" Width="95" Binding="{Binding Item3}"/>
+                        <DataGridTextColumn Header="expiration date" Width="110" Binding="{Binding Item4, StringFormat=\{0:dd.MM.yyyy\}}"/>
+                        <DataGridTextColumn Header="producer" Width="70" Binding="{Binding Item5}"/>
+                        <DataGridTextColumn Header="category" Width="70" Binding="{Binding Item6}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <StackPanel Width="315" Height="220" Margin="10,-6,0,0">
+                    <StackPanel Orientation="Horizontal" Width="285" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="0,11,0,15" Width="50" Height="25" FontSize="15" FontFamily="Consolas">Name:</TextBlock>
+                        <TextBox Name="productName" Width="100" Height="25" Margin="85,0,0,5" FontFamily="Consolas"/>
+                        <Button Margin="5,5,15,10" Content="Show" Width="45" Height="25" FontFamily="Consolas" Command="{Binding ShowProductByNameCommand}">
+                            <Button.CommandParameter>
+                                <Binding ElementName="productName" Path="Text" Converter="{StaticResource productStringConverter}"/>
+                            </Button.CommandParameter>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="285" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="0,11,0,15" Width="75" Height="25" FontSize="15" FontFamily="Consolas">Barcode:</TextBlock>
+                        <TextBox Name="productBarcode" Width="100" Height="25" Margin="60,0,0,5" FontFamily="Consolas"/>
+                        <Button Margin="5,5,15,10" Content="Show" Width="45" Height="25" FontFamily="Consolas" Command="{Binding ShowProductByBarcodeCommand}">
+                            <Button.CommandParameter>
+                                <Binding ElementName="productBarcode" Path="Text" Converter="{StaticResource productStringConverter}"/>
+                            </Button.CommandParameter>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="285" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="0,11,0,15" Width="135" Height="25" FontSize="15" FontFamily="Consolas">Expiration date:</TextBlock>
+                        <DatePicker Name="productExpirationDate" Width="100" FontFamily="Consolas"/>
+                        <Button Margin="5,5,15,10" Content="Show" Width="45" Height="25" FontFamily="Consolas" Command="{Binding ShowProductByExpirationDateCommand}">
+                            <Button.CommandParameter>
+                                <Binding ElementName="productExpirationDate" Path="SelectedDate" Converter="{StaticResource productDateTimeConverter}"/>
+                            </Button.CommandParameter>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="285" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="0,11,0,15" Width="135" Height="25" FontSize="15" FontFamily="Consolas">Producer:</TextBlock>
+                        <TextBox Name="productProducer" Width="100" Height="25" Margin="0,0,0,5" FontFamily="Consolas"/>
+                        <Button Margin="5,5,15,10" Content="Show" Width="45" Height="25" FontFamily="Consolas" Command="{Binding ShowProductByProducerCommand}">
+                            <Button.CommandParameter>
+                                <Binding ElementName="productProducer" Path="Text" Converter="{StaticResource productStringConverter}"/>
+                            </Button.CommandParameter>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="285" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="0,11,0,15" Width="135" Height="25" FontSize="15" FontFamily="Consolas">Category:</TextBlock>
+                        <TextBox Name="productCategory" Width="100" Height="25" Margin="0,0,0,5" FontFamily="Consolas"/>
+                        <Button Margin="5,5,15,10" Content="Show" Width="45" Height="25" FontFamily="Consolas" Command="{Binding ShowProductByCategoryCommand}">
+                            <Button.CommandParameter>
+                                <Binding ElementName="productCategory" Path="Text" Converter="{StaticResource productStringConverter}"/>
+                            </Button.CommandParameter>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0" Background="LightBlue" Width="650" Height="285">
+                <StackPanel Width="295">
+                    <DataGrid Name="receiptGrid" Margin="-2,5,0,15" AutoGenerateColumns="False" Width="225" Height="200" FontFamily="Consolas" ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{Binding ProductsOnReceipt, UpdateSourceTrigger=PropertyChanged}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="id__product" Width="80" Binding="{Binding Item1}"/>
+                            <DataGridTextColumn Header="product" Width="80" Binding="{Binding Item2}"/>
+                            <DataGridTextColumn Header="price" Width="50" Binding="{Binding Item3}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Orientation="Horizontal" Width="295" Height="45" Margin="0,-10,0,0">
+                        <TextBlock HorizontalAlignment="Left" Margin="5,11,0,15" Width="135" Height="25" FontSize="15" FontFamily="Consolas">Product barcode:</TextBlock>
+                        <TextBox Name="productToAddBarcode" Width="100" Height="25" Margin="0,0,0,5" FontFamily="Consolas"/>
+                        <Button Margin="5,5,15,10" Content="Add" Width="45" Height="25" FontFamily="Consolas" Command="{Binding AddProductOnReceiptCommand}">
+                            <Button.CommandParameter>
+                                <Binding ElementName="productToAddBarcode" Path="Text" Converter="{StaticResource productStringConverter}"/>
+                            </Button.CommandParameter>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="55" Height="40" Margin="0,-10,0,0">
+                        <Button Margin="5,5,15,10" Content="Finish" Width="45" Height="25" FontFamily="Consolas" Command="{Binding FinishReceiptCommand}"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Width="295" Margin="30,0,0,0">
+                    <DataGrid Name="finalReceiptGrid" Margin="-5,5,0,15" AutoGenerateColumns="False" Width="290" Height="200" FontFamily="Consolas" ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{Binding ProductsOnFinalReceipt, UpdateSourceTrigger=PropertyChanged}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="id__product" Width="80" Binding="{Binding Item1}"/>
+                            <DataGridTextColumn Header="product" Width="80" Binding="{Binding Item2}"/>
+                            <DataGridTextColumn Header="quantity" Width="65" Binding="{Binding Item3}"/>
+                            <DataGridTextColumn Header="price" Width="50" Binding="{Binding Item4}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Orientation="Horizontal" Width="275" Height="45" Margin="0,-10,0,0">
+                        <TextBlock HorizontalAlignment="Left" Margin="60,11,0,15" Width="100" Height="25" FontSize="15" FontFamily="Consolas">Final price:</TextBlock>
+                        <TextBlock HorizontalAlignment="Left" Margin="5,11,0,15" Width="50" Height="25" FontSize="15" FontFamily="Consolas" Text="{Binding FinalPrice}"></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <Button Content="Go back" Width="150" Height="35" Margin="0 12" FontFamily="Consolas" FontSize="15" Command="{Binding GoBackCommand}"/>
+        </StackPanel>
+        <StackPanel Visibility="{Binding ShowMarketUsersVisibility}">
+            <TextBlock HorizontalAlignment="Center" Width="170" Margin="0 5" Background="AliceBlue" TextAlignment="Center" FontFamily="Consolas" FontSize="25">Market users</TextBlock>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0" Background="LightBlue" Width="500" Height="50">
+                <TextBlock HorizontalAlignment="Left" Margin="60,15,0,15" Width="100" Height="25" FontSize="15" FontFamily="Consolas">Add cashier:</TextBlock>
+                <TextBox Name="cashierName" Width="75" Height="25" Margin="2,10,0,15" FontFamily="Consolas"/>
+                <TextBox Name="cashierPasswordHash" Width="75" Height="25" Margin="10,10,0,15" FontFamily="Consolas"/>
+                <Button HorizontalAlignment="Left" Margin="5,10,15,15" Content="Add in database" Width="110" Height="25" FontFamily="Consolas" Command="{Binding AddCommand}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource cashierNamePasswordConverter}">
+                            <Binding ElementName="cashierName" Path="Text"/>
+                            <Binding ElementName="cashierPasswordHash" Path="Text"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0" Background="LightBlue" Width="875" Height="250">
+                <DataGrid Name="marketUsersGrid" Margin="15,15,0,15" AutoGenerateColumns="False" Width="265" Height="200" FontFamily="Consolas" ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{Binding CashiersList, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="id" Width="25" FontFamily="Consolas" Binding="{Binding Item1}"/>
+                        <DataGridTextColumn Header="name" Width="115" FontFamily="Consolas" Binding="{Binding Item2}"/>
+                        <DataGridTextColumn Header="password" Width="125" FontFamily="Consolas" Binding="{Binding Item3}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="215" Height="220">
+                    <StackPanel Orientation="Horizontal" Width="215" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="12,11,0,15" Width="50" Height="25" FontSize="15" FontFamily="Consolas">Id:</TextBlock>
+                        <TextBox Name="cashierIdToEdit1" Width="75" Height="25" Margin="-5,0,0,5" FontFamily="Consolas"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Width="215" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="12,11,0,15" Width="50" Height="25" FontSize="15" FontFamily="Consolas">Name:</TextBlock>
+                        <TextBox Name="cashierNameToEdit" Width="75" Height="25" Margin="-5,0,0,5" FontFamily="Consolas"/>
+                        <Button Margin="5,5,15,10" Content="Edit" Width="45" Height="25" FontFamily="Consolas" Command="{Binding EditCashierNameCommand}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource cashierIdNameConverter}">
+                                    <Binding ElementName="cashierIdToEdit1" Path="Text"/>
+                                    <Binding ElementName="cashierNameToEdit" Path="Text"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Background="LightBlue" Width="215" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="12,11,0,15" Width="50" Height="25" FontSize="15" FontFamily="Consolas">Id:</TextBlock>
+                        <TextBox Name="cashierIdToEdit2" Width="75" Height="25" Margin="-5,0,0,5" FontFamily="Consolas"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Background="LightBlue" Width="215" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="12,11,0,15" Width="80" Height="25" FontSize="15" FontFamily="Consolas">Password:</TextBlock>
+                        <TextBox Name="cashierPasswordToEdit" Width="75" Height="25" Margin="-3,0,0,5" FontFamily="Consolas"/>
+                        <Button Margin="5,5,15,10" Content="Edit" Width="45" Height="25" FontFamily="Consolas" Command="{Binding EditCashierPasswordCommand}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource cashierIdPasswordConverter}">
+                                    <Binding ElementName="cashierIdToEdit2" Path="Text"/>
+                                    <Binding ElementName="cashierPasswordToEdit" Path="Text"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Background="LightBlue" Width="215" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="12,11,0,15" Width="50" Height="25" FontSize="15" FontFamily="Consolas">Id:</TextBlock>
+                        <TextBox Name="cashierIdToDelete" Width="75" Height="25" Margin="-5,0,0,5" FontFamily="Consolas"/>
+                        <Button Margin="5,5,15,10" Content="Delete" Width="45" Height="25" FontFamily="Consolas" Command="{Binding DeleteCashierCommand}">
+                            <Button.CommandParameter>
+                                <Binding ElementName="cashierIdToDelete" Path="Text" Converter="{StaticResource cashierIdConverter}"/>
+                            </Button.CommandParameter>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Width="200" Height="220">
+                    <DataGrid Name="usersMonthsCashInSumGrid" Margin="-2,8,0,15" AutoGenerateColumns="False" Width="175" Height="200" FontFamily="Consolas" ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{Binding CashierSumsInEveryMonthList, UpdateSourceTrigger=PropertyChanged}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="cashier" Width="55" Binding="{Binding Item1}"/>
+                            <DataGridTextColumn Header="month" Width="43" Binding="{Binding Item2}"/>
+                            <DataGridTextColumn Header="day" Width="30" Binding="{Binding Item3}"/>
+                            <DataGridTextColumn Header="sum" Width="35" Binding="{Binding Item4}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+                <StackPanel Width="170" Height="220" Margin="5,0,0,0">
+                    <StackPanel Orientation="Horizontal" Background="LightBlue" Width="160" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="0,11,0,15" Width="115" Height="25" FontSize="15" FontFamily="Consolas">Cashier:</TextBlock>
+                        <ComboBox Name="cashierName2" Width="85" Height="25" Margin="-45,0,0,5" FontFamily="Consolas" ItemsSource="{Binding ActiveCashiersList, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedCashier, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Background="LightBlue" Width="160" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="0,11,0,15" Width="115" Height="25" FontSize="15" FontFamily="Consolas">Month:</TextBlock>
+                        <ComboBox Name="month" Width="85" Height="25" Margin="-45,0,0,5" FontFamily="Consolas" ItemsSource="{Binding MonthList, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedMonth, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel VerticalAlignment="Center" Background="LightBlue" Width="160" Height="45">
+                        <Button Margin="20,5,15,10" Content="Show" Width="45" Height="25" FontFamily="Consolas" Command="{Binding ShowCashierSumsInEveryMonthCommand}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource cashierNameMonthConverter}">
+                                    <Binding ElementName="cashierName2" Path="Text"/>
+                                    <Binding ElementName="month" Path="Text"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0" Background="LightBlue" Width="500" Height="250">
+                <DataGrid Name="biggestReceiptGrid" Margin="40,8,0,15" AutoGenerateColumns="False" Width="185" Height="200" FontFamily="Consolas" ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{Binding BiggestReceipt, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="id" Width="25" Binding="{Binding Item1}"/>
+                        <DataGridTextColumn Header="cashier" Width="55" Binding="{Binding Item2}"/>
+                        <DataGridTextColumn Header="total__price" Width="120" Binding="{Binding Item3}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <StackPanel Width="200" Height="200" Margin="40,-6,0,0">
+                    <DatePicker Name="datePicker" FontFamily="Consolas"/>
+                    <Button Margin="20,5,15,10" Content="Show" Width="45" Height="25" FontFamily="Consolas" Command="{Binding ShowTheBiggestReceiptCommand}" CommandParameter="{Binding SelectedDate, ElementName=datePicker}"/>
+                </StackPanel>
+            </StackPanel>
+            <Button Content="Go back" Width="150" Height="35" Margin="0 20" FontFamily="Consolas" FontSize="15" Command="{Binding GoBackCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>

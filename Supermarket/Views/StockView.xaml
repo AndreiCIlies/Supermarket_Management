@@ -1,0 +1,112 @@
+﻿<Window x:Class="Supermarket.Views.StockView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Supermarket.ViewModels"
+        xmlns:converters="clr-namespace:Supermarket.Converters"
+        mc:Ignorable="d"
+        Title="StockView" Height="550" Width="950">
+    <Window.DataContext>
+        <local:StockVM/>
+    </Window.DataContext>
+    <Window.Resources>
+        <converters:AddStockConverter x:Key="addStockConverter"/>
+        <converters:EditStockConverter x:Key="editStockConverter"/>
+        <converters:StockIdConverter x:Key="stockIdConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/Images/stockBackground.jpg"/>
+        </Grid.Background>
+        <StackPanel>
+            <TextBlock HorizontalAlignment="Center" Width="170" Margin="0 5" Background="AliceBlue" TextAlignment="Center" FontFamily="Consolas" FontSize="25">Stocks</TextBlock>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0" Background="LightBlue" Width="695" Height="50">
+                <TextBlock HorizontalAlignment="Left" Margin="33,15,0,15" Width="100" Height="25" FontSize="15" FontFamily="Consolas">Add stock:</TextBlock>
+                <TextBox Name="stockProductId" Width="25" Height="25" Margin="0,10,0,15" FontFamily="Consolas"/>
+                <TextBox Name="stockQuantity" Width="40" Height="25" Margin="15,10,0,15" FontFamily="Consolas"/>
+                <TextBox Name="stockSupplyDate" Width="100" Height="25" Margin="15,10,0,15" FontFamily="Consolas"/>
+                <TextBox Name="stockExpirationDate" Width="100" Height="25" Margin="15,10,0,15" FontFamily="Consolas"/>
+                <TextBox Name="stockPurchasePrice" Width="85" Height="25" Margin="15,10,0,15" FontFamily="Consolas"/>
+                <Button HorizontalAlignment="Left" Margin="15,10,15,15" Content="Add in database" Width="105" Height="25" FontFamily="Consolas" Command="{Binding AddCommand}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource addStockConverter}">
+                            <Binding ElementName="stockProductId" Path="Text"/>
+                            <Binding ElementName="stockQuantity" Path="Text"/>
+                            <Binding ElementName="stockSupplyDate" Path="Text"/>
+                            <Binding ElementName="stockExpirationDate" Path="Text"/>
+                            <Binding ElementName="stockPurchasePrice" Path="Text"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0" Background="LightBlue" Width="910" Height="350">
+                <DataGrid Name="stocksGrid" Margin="15,5,0,15" AutoGenerateColumns="False" Width="560" Height="200" FontFamily="Consolas" ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{Binding StocksList, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="id" Width="25" Binding="{Binding Item1}"/>
+                        <DataGridTextColumn Header="product" Width="56" Binding="{Binding Item2}"/>
+                        <DataGridTextColumn Header="quantity" Width="63" Binding="{Binding Item3}"/>
+                        <DataGridTextColumn Header="supply__date" Width="83" Binding="{Binding Item4, StringFormat=\{0:dd.MM.yyyy\}}"/>
+                        <DataGridTextColumn Header="expiration__date" Width="110" Binding="{Binding Item5, StringFormat=\{0:dd.MM.yyyy\}}"/>
+                        <DataGridTextColumn Header="purchase__price" Width="110" Binding="{Binding Item6}"/>
+                        <DataGridTextColumn Header="selling__price" Width="110" Binding="{Binding Item7}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="240" Height="315">
+                    <StackPanel Orientation="Horizontal" Background="LightBlue" Width="220" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="0,11,0,15" Width="50" Height="25" FontSize="15" FontFamily="Consolas">Id:</TextBlock>
+                        <TextBox Name="stockIdToEdit" Width="75" Height="25" Margin="86,0,0,5" FontFamily="Consolas"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Background="LightBlue" Width="220" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="0,11,0,15" Width="105" Height="25" FontSize="15" FontFamily="Consolas">Product Id:</TextBlock>
+                        <TextBox Name="stockProductIdToEdit" Width="75" Height="25" Margin="31,0,0,5" FontFamily="Consolas"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Background="LightBlue" Width="220" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="0,11,0,15" Width="105" Height="25" FontSize="15" FontFamily="Consolas">Quantity:</TextBlock>
+                        <TextBox Name="stockQuantityToEdit" Width="75" Height="25" Margin="31,0,0,5" FontFamily="Consolas"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Background="LightBlue" Width="220" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="0,11,0,15" Width="100" Height="25" FontSize="15" FontFamily="Consolas">Supply Date:</TextBlock>
+                        <TextBox Name="stockSupplyDateToEdit" Width="75" Height="25" Margin="37,0,0,5" FontFamily="Consolas"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Background="LightBlue" Width="220" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="0,11,0,15" Width="135" Height="25" FontSize="15" FontFamily="Consolas">Expiration Date:</TextBlock>
+                        <TextBox Name="stockExpirationDateToEdit" Width="75" Height="25" Margin="2,0,0,5" FontFamily="Consolas"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Background="LightBlue" Width="220" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="0,11,0,15" Width="120" Height="25" FontSize="15" FontFamily="Consolas">Selling Price:</TextBlock>
+                        <TextBox Name="stockSellingPriceToEdit" Width="75" Height="25" Margin="18,0,0,5" FontFamily="Consolas"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Background="LightBlue" Width="220" Height="50">
+                        <Button HorizontalAlignment="Left" Margin="55,0,15,15" Content="Edit" Width="105" Height="25" FontFamily="Consolas" Command="{Binding EditStockCommand}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource editStockConverter}">
+                                    <Binding ElementName="stockIdToEdit" Path="Text"/>
+                                    <Binding ElementName="stockProductIdToEdit" Path="Text"/>
+                                    <Binding ElementName="stockQuantityToEdit" Path="Text"/>
+                                    <Binding ElementName="stockSupplyDateToEdit" Path="Text"/>
+                                    <Binding ElementName="stockExpirationDateToEdit" Path="Text"/>
+                                    <Binding ElementName="stockSellingPriceToEdit" Path="Text"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="90" Height="275" Margin="0,-42,0,0">
+                    <StackPanel Orientation="Horizontal" Background="LightBlue" Width="215" Height="45">
+                        <TextBlock HorizontalAlignment="Left" Margin="12,11,0,15" Width="50" Height="25" FontSize="15" FontFamily="Consolas">Id:</TextBlock>
+                        <TextBox Name="stockIdToDelete" Width="25" Height="25" Margin="-15,0,0,5" FontFamily="Consolas"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Background="LightBlue" Width="90" Height="50">
+                        <Button HorizontalAlignment="Left" Margin="10,5,15,15" Content="Delete" Width="70" Height="25" FontFamily="Consolas" Command="{Binding DeleteStockCommand}">
+                            <Button.CommandParameter>
+                                <Binding ElementName="stockIdToDelete" Path="Text" Converter="{StaticResource stockIdConverter}"/>
+                            </Button.CommandParameter>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <Button Content="Go back" Width="150" Height="35" Margin="0 20" FontFamily="Consolas" FontSize="15" Command="{Binding GoBackCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>

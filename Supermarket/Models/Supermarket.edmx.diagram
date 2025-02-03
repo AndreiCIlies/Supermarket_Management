@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="4d647806262a431287838d3f383cfa22" Name="Diagram1">
+        <EntityTypeShape EntityType="SupermarketModel.Category" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SupermarketModel.Country" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SupermarketModel.MarketUser" Width="1.5" PointX="3" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SupermarketModel.Producer" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SupermarketModel.Product" Width="1.5" PointX="5.25" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SupermarketModel.Receipt" Width="1.5" PointX="5.25" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SupermarketModel.ReceiptItem" Width="1.5" PointX="7.5" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SupermarketModel.Stock" Width="1.5" PointX="7.5" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SupermarketModel.UserType" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
+        <AssociationConnector Association="SupermarketModel.FK__Product__id_cate__45F365D3" ManuallyRouted="false" />
+        <AssociationConnector Association="SupermarketModel.FK__Producer__id_cou__3D5E1FD2" ManuallyRouted="false" />
+        <AssociationConnector Association="SupermarketModel.FK__MarketUse__id_ty__5070F446" ManuallyRouted="false" />
+        <AssociationConnector Association="SupermarketModel.FK__Receipt__id_cash__5AEE82B9" ManuallyRouted="false" />
+        <AssociationConnector Association="SupermarketModel.FK__Product__id_prod__46E78A0C" ManuallyRouted="false" />
+        <AssociationConnector Association="SupermarketModel.FK__ReceiptIt__id_pr__5FB337D6" ManuallyRouted="false" />
+        <AssociationConnector Association="SupermarketModel.FK__Stock__id_produc__5629CD9C" ManuallyRouted="false" />
+        <AssociationConnector Association="SupermarketModel.FK__ReceiptIt__id_re__5EBF139D" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
