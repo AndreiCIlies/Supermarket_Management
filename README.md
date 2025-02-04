@@ -1,4 +1,4 @@
-## Supermarket Management
+# Supermarket Management
 
 ### Admin Mode
 https://github.com/user-attachments/assets/1aeaae43-0d62-41c7-a756-10471ac8946a
