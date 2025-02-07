@@ -8,12 +8,12 @@ https://github.com/user-attachments/assets/1aeaae43-0d62-41c7-a756-10471ac8946a
 
 ## Description
 
-The **Supermarket Management Application** is a desktop application built using **C#**, **WPF (.NET Framework)**, **Entity Framework**, and **SQL Server**. The application is designed to manage various aspects of a supermarket's operations, including product inventory, suppliers, categories, and user management. It follows the **MVVM (Model-View-ViewModel)** design pattern, ensuring a clear separation between the application's logic and its UI.
+The **Supermarket Management Application** is a desktop application built using **C#**, **WPF (.NET Framework)**, **Entity Framework**, and **SQL Server**. The application is designed to manage various aspects of a supermarket's operations, including product inventory, suppliers, categories, sales transactions, and user management. It follows the **MVVM (Model-View-ViewModel)** design pattern, ensuring a clear separation between the application's logic and its UI.
 
 Key features of the application include:
 - Management of products, including name, barcode, expiration date, category, and supplier information.
 - Handling product categories (e.g., food, clothing, stationery).
-- Management of stock quantities and purchase prices.
+- Management of stock quantities, purchase prices, and sales prices.
 - User management with two roles: **Administrator** and **Cashier**.
 - Administrator functionalities like adding, editing, and deleting users, products, suppliers, categories, and stocks.
 - Cashier functionalities for searching products by different criteria (name, barcode, etc.) and issuing sales receipts.
